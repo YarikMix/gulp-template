@@ -13,7 +13,7 @@ let path = {
 		libs: project_folder + "/libs/"
 	},
 	src: {
-		html: [source_folder + "/*.html", "!" + source_folder + "/_*.html"],
+		html: [source_folder + "/html/index.html", "!" + source_folder + "/html/common/*.html"],
 		css: source_folder + "/sass/style.sass",
 		js: source_folder + "/js/script.js",
 		img: source_folder + "/img/**/*.{jpg,png,svg,gif,ico,webp}",
@@ -21,7 +21,7 @@ let path = {
 		libs: source_folder + "/libs/**/*"
 	},
 	watch: {
-		html: source_folder + "**/*.html",
+		html: source_folder + "/html/*",
 		css: source_folder + "/sass/*.sass",
 		js: source_folder + "/js/*.js",
 		img: source_folder + "/img/**/*.{jpg,png,svg,gif,ico,webp}",
@@ -118,9 +118,9 @@ function fonts() {
 }
 
 function fontsStyle() {
-	let file_content = fs.readFileSync(source_folder + '/sass/fonts.sass');
+	let file_content = fs.readFileSync(source_folder + '/sass/utils/fonts.sass');
 	if (file_content == '') {
-		fs.writeFile(source_folder + '/sass/fonts.sass', '', cb);
+		fs.writeFile(source_folder + '/sass/utils/fonts.sass', '', cb);
 		return fs.readdir(path.build.fonts, function (err, items) {
 			if (items) {
 				let c_fontname;
@@ -128,7 +128,7 @@ function fontsStyle() {
 					let fontname = items[i].split('.');
 					fontname = fontname[0];
 					if (c_fontname != fontname) {
-						fs.appendFile(source_folder + '/sass/fonts.sass', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
+						fs.appendFile(source_folder + '/sass/utils/fonts.sass', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
 					}
 					c_fontname = fontname;
 				}
