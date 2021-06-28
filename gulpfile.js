@@ -22,7 +22,7 @@ let path = {
 	},
 	watch: {
 		html: source_folder + "/html/**/*.html",
-		css: source_folder + "/sass/*.sass",
+		css: source_folder + "/sass/**/*.sass",
 		js: source_folder + "/js/*.js",
 		img: source_folder + "/img/**/*.{jpg,png,svg,gif,ico,webp}",
 		fonts: source_folder + "/fonts/**/*.{woff,woff2}",
@@ -117,25 +117,25 @@ function fonts() {
 	.pipe(browsersync.stream())
 }
 
-function fontsStyle() {
-	let file_content = fs.readFileSync(source_folder + '/sass/utils/fonts.sass');
-	if (file_content == '') {
-		fs.writeFile(source_folder + '/sass/utils/fonts.sass', '', cb);
-		return fs.readdir(path.build.fonts, function (err, items) {
-			if (items) {
-				let c_fontname;
-				for (var i = 0; i < items.length; i++) {
-					let fontname = items[i].split('.');
-					fontname = fontname[0];
-					if (c_fontname != fontname) {
-						fs.appendFile(source_folder + '/sass/utils/fonts.sass', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
-					}
-					c_fontname = fontname;
-				}
-			}
-		})
-	}
-}
+// function fontsStyle() {
+// 	let file_content = fs.readFileSync(source_folder + '/sass/utils/fonts.sass');
+// 	if (file_content == '') {
+// 		fs.writeFile(source_folder + '/sass/utils/fonts.sass', '', cb);
+// 		return fs.readdir(path.build.fonts, function (err, items) {
+// 			if (items) {
+// 				let c_fontname;
+// 				for (var i = 0; i < items.length; i++) {
+// 					let fontname = items[i].split('.');
+// 					fontname = fontname[0];
+// 					if (c_fontname != fontname) {
+// 						fs.appendFile(source_folder + '/sass/utils/fonts.sass', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
+// 					}
+// 					c_fontname = fontname;
+// 				}
+// 			}
+// 		})
+// 	}
+// }
 
 function libs() {
 	return src(path.src.libs)
@@ -156,7 +156,7 @@ function cleandist() {
 	return del(path.clean, { force: true });
 }
 
-let build = gulp.series(cleandist, gulp.parallel(html, css, js, images, fonts, libs), fontsStyle);
+let build = gulp.series(cleandist, gulp.parallel(html, css, js, images, fonts, libs));
 let watch = gulp.parallel(build, startwatch, browserSync);
 
 exports.html = html;
@@ -164,7 +164,6 @@ exports.css = css;
 exports.js = js;
 exports.images = images;
 exports.fonts = fonts;
-exports.fontsStyle = fontsStyle;
 exports.libs = libs;
 exports.build = build;
 exports.watch = watch;
